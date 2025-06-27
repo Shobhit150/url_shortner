@@ -18,7 +18,25 @@ A **highly scalable**, **zero-tolerance** URL shortener built with **Go**, **Pos
 
 ## 🧱 Project Structure
 
-<pre> ```bash url-shortener/ ├── cmd/ # Entry point for the HTTP/GRPC server │ └── server/ │ └── main.go ├── internal/ │ ├── handler/ # REST/GRPC route handlers │ ├── service/ # Business logic layer │ ├── repository/ # Database interaction │ ├── cache/ # Redis cache interface │ └── utils/ # Slug generator, validators, etc. ├── proto/ # GRPC protobufs (optional) ├── migrations/ # SQL migration files ├── configs/ # Config and environment files ├── Dockerfile # Docker setup for the service ├── docker-compose.yml # Dev orchestration with Redis and Postgres ├── go.mod └── README.md ``` </pre>
+<pre> ```bash
+url-shortener/
+├── cmd/                      # Entry point for the HTTP/GRPC server
+│   └── server/
+│       └── main.go
+├── internal/
+│   ├── handler/              # REST/GRPC route handlers
+│   ├── service/              # Business logic layer
+│   ├── repository/           # Database interaction
+│   ├── cache/                # Redis cache interface
+│   └── utils/                # Slug generator, validators, etc.
+├── proto/                    # GRPC protobufs (optional)
+├── migrations/               # SQL migration files
+├── configs/                  # Config and environment files
+├── Dockerfile                # Docker setup for the service
+├── docker-compose.yml        # Dev orchestration with Redis and Postgres
+├── go.mod
+└── README.md
+``` </pre>
 
 
 ---
