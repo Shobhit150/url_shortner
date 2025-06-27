@@ -18,7 +18,7 @@ A **highly scalable**, **zero-tolerance** URL shortener built with **Go**, **Pos
 
 ## 🧱 Project Structure
 
-<pre> ```bash
+<pre> 
 url-shortener/
 ├── cmd/                      # Entry point for the HTTP/GRPC server
 │   └── server/
@@ -36,7 +36,7 @@ url-shortener/
 ├── docker-compose.yml        # Dev orchestration with Redis and Postgres
 ├── go.mod
 └── README.md
-``` </pre>
+ </pre>
 
 
 ---
