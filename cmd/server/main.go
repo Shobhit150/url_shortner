@@ -4,7 +4,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"log"
-	"url-shortener/internal/handler"
+	"github.com/Shobhit150/url_shortner/internal/handler"
 )
 
 func main() {
