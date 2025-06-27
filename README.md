@@ -35,3 +35,18 @@ url-shortener/
 ├── docker-compose.yml # Dev orchestration with Redis and Postgres
 ├── go.mod
 └── README.md
+
+
+---
+
+## ⚙️ Tech Stack
+
+- **Language:** Go
+- **Database:** PostgreSQL
+- **Cache:** Redis
+- **Containerization:** Docker
+- **API:** REST (option to switch to gRPC)
+- **Monitoring:** Prometheus + Grafana (optional)
+- **Queue (optional):** Kafka/NATS for analytics
+
+---
