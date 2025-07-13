@@ -19,6 +19,8 @@ WORKDIR /app
 COPY --from=builder /app/urlshortener .
 # COPY --from=builder /app/configs ./configs # If you have configs
 EXPOSE 8080
+EXPOSE 50051
+
 
 # Set ENV if you want to override from docker run
 # ENV DATABASE_URL="postgres://user:password@host.docker.internal:5432/urlshortener?sslmode=disable"

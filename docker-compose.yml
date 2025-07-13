@@ -19,13 +19,22 @@ services:
   app:
     build: .
     ports:
-      - "8080:8080"
+      - "8080:8080"   # REST
+      - "50051:50051" # gRPC
     environment:
       DATABASE_URL: "postgres://user:password@db:5432/urlshortener?sslmode=disable"
       REDIS_ADDR: "redis:6379"
     depends_on:
       - db
       - redis
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - app
 
 volumes:
   pgdata:

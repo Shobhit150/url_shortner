@@ -1,0 +1,32 @@
+syntax = "proto3";
+package urlshortener;
+
+option go_package = "github.com/Shobhit150/scalable_url_shortner/proto;urlshortenerpb";
+
+service URLShortener {
+  rpc Shorten (ShortenRequest) returns (ShortenResponse);
+  rpc Redirect (RedirectRequest) returns (RedirectResponse);
+  rpc GetStats (StatsRequest) returns (StatsResponse);
+}
+
+message ShortenRequest {
+  string long_url = 1;
+  string custom_slug = 2;
+}
+message ShortenResponse {
+  string slug = 1;
+}
+
+message RedirectRequest {
+  string slug = 1;
+}
+message RedirectResponse {
+  string long_url = 1;
+}
+
+message StatsRequest {
+  string slug = 1;
+}
+message StatsResponse {
+  int32 clicks = 1;
+}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -28,7 +29,7 @@ func GetRedisClient() *redis.Client {
 
 func SetSlug(ctx context.Context, slug, url string) error {
 	client := GetRedisClient()
-	return client.Set(ctx,slug,url,0).Err()
+	return client.Set(ctx,slug,url, 24*time.Hour).Err()
 }
 
 func GetSlug(ctx context.Context, slug string) (string, error) {
