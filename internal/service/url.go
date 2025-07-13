@@ -1,21 +1,75 @@
 package service
 
 import (
+	"context"
 	"errors"
+
+	"github.com/Shobhit150/url_shortner/internal/cache"
 	"github.com/Shobhit150/url_shortner/internal/repository"
 	"github.com/Shobhit150/url_shortner/internal/utils"
 )
-func Shorten(longURL string) (string, error) {
-	slug := utils.GenerateSlug()
+func Shorten(longURL string, CustomSlug string) (string, error) {
+	var slug string = ""
+	if(CustomSlug == "") {
+		for {
+			slug = utils.GenerateSlug()
+			exists, err := repository.Exists(slug)
+			if(err!=nil) {
+				return "", err;
+			}
+			if(!exists) {
+				break
+			}
+		}
+		// slug := utils.GenerateSlug()
 
-	err := repository.Save(slug, longURL) 
+		// exists, _ := repository.Exists(slug)
 
+		// if exists {
+		// 	return "", errors.New("slug collision, try again")
+		// }
+
+		// err := repository.Save(slug, longURL) 
+
+		// if err != nil {
+		// 	return "", err
+		// }
+		// return slug, nil
+	}else {
+		exists, err := repository.Exists(CustomSlug)
+		if(err != nil) {
+			return "", err
+		}
+		if(exists) {
+			return "", errors.New("custom slug is already is already taken")
+		}
+		slug = CustomSlug
+	}
+	err := repository.Save(slug,longURL)
 	if err != nil {
 		return "", err
 	}
 	return slug, nil
+
 }
 
-func Resolve(slug string) (string, error){
-	return repository.Find(slug)
+func Redirect(slug string) (string, error){
+	ctx := context.Background()
+	longURL, err := cache.GetSlug(ctx, slug)
+
+	if err == nil {
+		return longURL, nil
+	}
+
+	longURL, err = repository.Find(slug)
+
+	if err != nil {
+		return "", err
+	}
+
+	_ = cache.SetSlug(ctx, slug, longURL)
+	return longURL, nil
+}
+func GetClicks(slug string) (int, error){
+	return repository.GetClickCount(slug)
 }

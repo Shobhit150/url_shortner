@@ -1,10 +1,12 @@
-package handler
+ package handler
 
-import (
+ import (
 	"github.com/gin-gonic/gin"
-)
+ )
 
-func RegisterRouters(r *gin.Engine) {
+ func RegisterRouters(r *gin.Engine) {
 	r.POST("/shorten", ShortenURL)
+	r.GET("/stats/:slug", GetStats)
 	r.GET("/:slug", Redirect)
-}
+	
+ }

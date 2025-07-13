@@ -1,18 +1,23 @@
 package handler
 
 import (
-    "github.com/gin-gonic/gin"
-    "net/http"
-    "github.com/Shobhit150/url_shortner/internal/service"
+	"net/http"
+
+	"github.com/Shobhit150/url_shortner/internal/repository"
+	"github.com/Shobhit150/url_shortner/internal/service"
+	"github.com/gin-gonic/gin"
 )
 
-func Redirect(c *gin.Context) {
+ func Redirect(c *gin.Context) {
 	slug := c.Param("slug")
 
-	url, err := service.Resolve(slug)
+	longURL, err := service.Redirect(slug)
+
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
-		return
+		c.JSON(http.StatusNotFound, gin.H{"error" : "URL Not Found"})
 	}
-	c.Redirect(http.StatusFound, url)
-}
+	go repository.IncrementClicks(slug)
+
+	c.Redirect(http.StatusFound, longURL)
+
+ }
