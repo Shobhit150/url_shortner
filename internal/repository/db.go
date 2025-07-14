@@ -3,8 +3,10 @@ package repository
 import (
 	"database/sql"
 	"errors"
-	_ "github.com/lib/pq"
+	// "fmt"
 	"log"
+
+	_ "github.com/lib/pq"
 )
 
 var db *sql.DB
@@ -28,9 +30,14 @@ func Save(slug string, longURL string) error {
 func Find(slug string) (string, error) {
 	var longURL string
 	err := db.QueryRow(`SELECT long_url FROM urls WHERE slug = $1`, slug).Scan(&longURL)
+	// if(err != nil){
+	// 	fmt.Println("Looking for slug:", slug)
+	// 	fmt.Println("Looking for string:", longURL)
+	// 	fmt.Println("to this is error", err)
+	// }
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return "", errors.New("URL not found")
+			return "", errors.New("URL not found2")
 		}
 		return "", err
 	}

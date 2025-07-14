@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	// "fmt"
 
 	"github.com/Shobhit150/url_shortner/internal/cache"
 	"github.com/Shobhit150/url_shortner/internal/repository"
@@ -55,15 +56,19 @@ func Shorten(longURL string, CustomSlug string) (string, error) {
 
 func Redirect(slug string) (string, error){
 	ctx := context.Background()
+
+	// fmt.Println("this is slug in before redirect", slug)
 	longURL, err := cache.GetSlug(ctx, slug)
 
 	if err == nil {
 		return longURL, nil
 	}
 
+	// fmt.Println("this is slug in after redirect", slug)
 	longURL, err = repository.Find(slug)
 
 	if err != nil {
+		// fmt.Println("error is here")
 		return "", err
 	}
 

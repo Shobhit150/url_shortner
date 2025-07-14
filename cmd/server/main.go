@@ -30,8 +30,8 @@ func main() {
 		r := gin.Default()
 		r.Use(middleware.RateLimiter())
 		handler.RegisterRouters(r)
-		
-		log.Println("REST API listening on :8080")
+			
+		log.Println("REST API listening on the :8080")
 		if err := r.Run(":8080"); err != nil {
 			log.Fatal("REST server:", err)
 		}
