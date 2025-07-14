@@ -27,12 +27,21 @@ services:
     depends_on:
       - db
       - redis
+    # Uncomment this for Go live reload! (see below)
+    # volumes:
+    #   - .:/app
+    #   - /app/tmp
 
   frontend:
     build:
       context: ./frontend
+    working_dir: /app
+    command: "npm run dev"
     ports:
       - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - app
 

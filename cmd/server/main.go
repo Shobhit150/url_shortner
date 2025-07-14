@@ -7,9 +7,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection" // ADD THIS LINE
+	"google.golang.org/grpc/reflection"
 
 	"github.com/Shobhit150/url_shortner/internal/handler"
+	"github.com/Shobhit150/url_shortner/internal/middleware"
 	"github.com/Shobhit150/url_shortner/internal/repository"
 	urlshortenerpb "github.com/Shobhit150/url_shortner/proto"
 )
@@ -24,7 +25,9 @@ func main() {
 	// REST API
 	go func() {
 		r := gin.Default()
+		r.Use(middleware.RateLimiter())
 		handler.RegisterRouters(r)
+		
 		log.Println("REST API listening on :8080")
 		if err := r.Run(":8080"); err != nil {
 			log.Fatal("REST server:", err)
