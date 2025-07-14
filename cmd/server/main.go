@@ -20,6 +20,9 @@ func main() {
 	if dsn == "" {
 		dsn = "postgres://user:password@localhost:5432/urlshortener?sslmode=disable"
 	}
+
+
+	
 	repository.InitPostgres(dsn)
 
 	// REST API
