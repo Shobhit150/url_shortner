@@ -3,6 +3,8 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"time"
+
 	// "fmt"
 	"log"
 
@@ -13,10 +15,37 @@ var db *sql.DB
 
 func InitPostgres(dsn string) {
 	var err error
-	db, err = sql.Open("postgres", dsn)
-	if err != nil {
-		log.Fatal(err)
+
+	// Retry logic for DB startup (optional, but good for Docker Compose setups)
+	for i := 0; i < 10; i++ {
+		db, err = sql.Open("postgres", dsn)
+		if err == nil {
+			err = db.Ping()
+			if err == nil {
+				break
+			}
+		}
+		log.Printf("Waiting for database... (retrying in 1s)\n")
+		time.Sleep(1 * time.Second)
 	}
+	if err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
+
+	// Create table if not exists
+	createTableQuery := `
+	CREATE TABLE IF NOT EXISTS urls (
+		id SERIAL PRIMARY KEY,
+		slug TEXT UNIQUE NOT NULL,
+		long_url TEXT NOT NULL,
+		clicks INTEGER DEFAULT 0
+	);`
+	_, err = db.Exec(createTableQuery)
+	if err != nil {
+		log.Fatalf("Failed to create urls table: %v", err)
+	}
+
+	log.Println("Database initialized and urls table ensured.")
 }
 
 // Auto-create table if not exists

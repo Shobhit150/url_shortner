@@ -37,9 +37,9 @@ services:
       context: ./frontend
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/app         # Live mount for hot reload
-      - /app/node_modules       # Prevents override of node_modules
+    # volumes:
+      # - ./frontend:/app         # Live mount for hot reload
+      # - /app/node_modules       # Prevents override of node_modules
     working_dir: /app
     environment:
       NODE_ENV: development
