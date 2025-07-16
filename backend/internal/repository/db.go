@@ -19,6 +19,18 @@ func InitPostgres(dsn string) {
 	}
 }
 
+// Auto-create table if not exists
+	// createTableQuery := `
+	// // CREATE TABLE IF NOT EXISTS urls (
+	// // 	id SERIAL PRIMARY KEY,
+	// // 	slug TEXT UNIQUE NOT NULL,
+	// // 	long_url TEXT NOT NULL,
+	// // 	clicks INTEGER DEFAULT 0,
+		
+	// // );`
+
+	// _, err = db.Exec(createTableQuery)
+
 func Save(slug string, longURL string) error {
 	_, err := db.Exec(`INSERT INTO urls (slug, long_url) VALUES ($1, $2)`, slug, longURL)
 	if err != nil {

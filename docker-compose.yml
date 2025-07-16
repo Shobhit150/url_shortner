@@ -1,4 +1,4 @@
-version: "3.8"
+
 services:
   db:
     image: postgres:15
@@ -33,15 +33,19 @@ services:
     #   - /app/tmp
 
   frontend:
-    build: ./frontend
-    command: "npm run dev"
+    build:
+      context: ./frontend
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - ./frontend:/app         # Live mount for hot reload
+      - /app/node_modules       # Prevents override of node_modules
+    working_dir: /app
     environment:
-      - NEXT_PUBLIC_API_URL=http://app:8080
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://app:8080
+    command: npm run dev        # Use dev server for hot reload
+    user: "1000:1000"
     depends_on:
       - app
 
