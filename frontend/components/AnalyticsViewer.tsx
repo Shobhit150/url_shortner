@@ -26,7 +26,7 @@ export default function AnalyticsViewer() {
         setError(""); setData(null); setLoading(true);
         try {
             const res = await fetch(`http://localhost:8080/analytics/${chosenSlug}`);
-            if (!res.ok) throw new Error("Slug not found or server error");
+            if (!res.ok) throw new Error("No one clicked your link or it does not exist");
             const json: AnalyticsResponse = await res.json();
             setData(json);
         } catch (err: any) {
