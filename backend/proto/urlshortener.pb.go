@@ -25,6 +25,7 @@ type ShortenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	LongUrl       string                 `protobuf:"bytes,1,opt,name=long_url,json=longUrl,proto3" json:"long_url,omitempty"`
 	CustomSlug    string                 `protobuf:"bytes,2,opt,name=custom_slug,json=customSlug,proto3" json:"custom_slug,omitempty"`
+	ExpiresAt     string                 `protobuf:"bytes,3,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"` // ISO8601/RFC3339 (UTC). Optional.
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -69,6 +70,13 @@ func (x *ShortenRequest) GetLongUrl() string {
 func (x *ShortenRequest) GetCustomSlug() string {
 	if x != nil {
 		return x.CustomSlug
+	}
+	return ""
+}
+
+func (x *ShortenRequest) GetExpiresAt() string {
+	if x != nil {
+		return x.ExpiresAt
 	}
 	return ""
 }
@@ -120,6 +128,9 @@ func (x *ShortenResponse) GetSlug() string {
 type RedirectRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Slug          string                 `protobuf:"bytes,1,opt,name=slug,proto3" json:"slug,omitempty"`
+	IpAddress     string                 `protobuf:"bytes,2,opt,name=ip_address,json=ipAddress,proto3" json:"ip_address,omitempty"`
+	UserAgent     string                 `protobuf:"bytes,3,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty"`
+	Referrer      string                 `protobuf:"bytes,4,opt,name=referrer,proto3" json:"referrer,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -161,9 +172,31 @@ func (x *RedirectRequest) GetSlug() string {
 	return ""
 }
 
+func (x *RedirectRequest) GetIpAddress() string {
+	if x != nil {
+		return x.IpAddress
+	}
+	return ""
+}
+
+func (x *RedirectRequest) GetUserAgent() string {
+	if x != nil {
+		return x.UserAgent
+	}
+	return ""
+}
+
+func (x *RedirectRequest) GetReferrer() string {
+	if x != nil {
+		return x.Referrer
+	}
+	return ""
+}
+
 type RedirectResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	LongUrl       string                 `protobuf:"bytes,1,opt,name=long_url,json=longUrl,proto3" json:"long_url,omitempty"`
+	ExpiresAt     string                 `protobuf:"bytes,2,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -201,6 +234,13 @@ func (*RedirectResponse) Descriptor() ([]byte, []int) {
 func (x *RedirectResponse) GetLongUrl() string {
 	if x != nil {
 		return x.LongUrl
+	}
+	return ""
+}
+
+func (x *RedirectResponse) GetExpiresAt() string {
+	if x != nil {
+		return x.ExpiresAt
 	}
 	return ""
 }
@@ -252,6 +292,7 @@ func (x *StatsRequest) GetSlug() string {
 type StatsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Clicks        int32                  `protobuf:"varint,1,opt,name=clicks,proto3" json:"clicks,omitempty"`
+	ExpiresAt     string                 `protobuf:"bytes,2,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -293,25 +334,43 @@ func (x *StatsResponse) GetClicks() int32 {
 	return 0
 }
 
+func (x *StatsResponse) GetExpiresAt() string {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return ""
+}
+
 var File_proto_urlshortener_proto protoreflect.FileDescriptor
 
 const file_proto_urlshortener_proto_rawDesc = "" +
 	"\n" +
-	"\x18proto/urlshortener.proto\x12\furlshortener\"L\n" +
+	"\x18proto/urlshortener.proto\x12\furlshortener\"k\n" +
 	"\x0eShortenRequest\x12\x19\n" +
 	"\blong_url\x18\x01 \x01(\tR\alongUrl\x12\x1f\n" +
 	"\vcustom_slug\x18\x02 \x01(\tR\n" +
-	"customSlug\"%\n" +
+	"customSlug\x12\x1d\n" +
+	"\n" +
+	"expires_at\x18\x03 \x01(\tR\texpiresAt\"%\n" +
 	"\x0fShortenResponse\x12\x12\n" +
-	"\x04slug\x18\x01 \x01(\tR\x04slug\"%\n" +
+	"\x04slug\x18\x01 \x01(\tR\x04slug\"\x7f\n" +
 	"\x0fRedirectRequest\x12\x12\n" +
-	"\x04slug\x18\x01 \x01(\tR\x04slug\"-\n" +
+	"\x04slug\x18\x01 \x01(\tR\x04slug\x12\x1d\n" +
+	"\n" +
+	"ip_address\x18\x02 \x01(\tR\tipAddress\x12\x1d\n" +
+	"\n" +
+	"user_agent\x18\x03 \x01(\tR\tuserAgent\x12\x1a\n" +
+	"\breferrer\x18\x04 \x01(\tR\breferrer\"L\n" +
 	"\x10RedirectResponse\x12\x19\n" +
-	"\blong_url\x18\x01 \x01(\tR\alongUrl\"\"\n" +
+	"\blong_url\x18\x01 \x01(\tR\alongUrl\x12\x1d\n" +
+	"\n" +
+	"expires_at\x18\x02 \x01(\tR\texpiresAt\"\"\n" +
 	"\fStatsRequest\x12\x12\n" +
-	"\x04slug\x18\x01 \x01(\tR\x04slug\"'\n" +
+	"\x04slug\x18\x01 \x01(\tR\x04slug\"F\n" +
 	"\rStatsResponse\x12\x16\n" +
-	"\x06clicks\x18\x01 \x01(\x05R\x06clicks2\xe6\x01\n" +
+	"\x06clicks\x18\x01 \x01(\x05R\x06clicks\x12\x1d\n" +
+	"\n" +
+	"expires_at\x18\x02 \x01(\tR\texpiresAt2\xe6\x01\n" +
 	"\fURLShortener\x12F\n" +
 	"\aShorten\x12\x1c.urlshortener.ShortenRequest\x1a\x1d.urlshortener.ShortenResponse\x12I\n" +
 	"\bRedirect\x12\x1d.urlshortener.RedirectRequest\x1a\x1e.urlshortener.RedirectResponse\x12C\n" +

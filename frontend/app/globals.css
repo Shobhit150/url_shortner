@@ -3,6 +3,24 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+@layer utilities {
+  .animate-fadein {
+    animation: fadein .7s cubic-bezier(.23,1.01,.32,1);
+  }
+  .animate-fadein2 {
+    animation: fadein2 .5s cubic-bezier(.23,1.01,.32,1);
+  }
+  @keyframes fadein {
+    0% {opacity:0; transform: translateY(30px);}
+    100% {opacity:1; transform: none;}
+  }
+  @keyframes fadein2 {
+    0% {opacity:0;}
+    100% {opacity:1;}
+  }
+}
+
 /* :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -21,6 +39,10 @@
     --foreground: #ededed;
   }
 }
+
+
+
+
 
 body {
   background: var(--background);

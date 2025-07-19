@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"time"
 
 	"github.com/Shobhit150/url_shortner/internal/service"
 	urlshortenerpb "github.com/Shobhit150/url_shortner/proto"
@@ -13,25 +14,60 @@ type URLShortenerServer struct {
 }
 
 func (s *URLShortenerServer) Shorten(ctx context.Context, req *urlshortenerpb.ShortenRequest) (*urlshortenerpb.ShortenResponse, error) {
-	slug, err := service.Shorten(req.LongUrl, req.CustomSlug)
+	// Parse expires_at if provided
+	var expiresAt *time.Time
+	if req.ExpiresAt != "" {
+		parsed, err := time.Parse(time.RFC3339, req.ExpiresAt)
+		if err != nil {
+			return nil, err
+		}
+		expiresAt = &parsed
+	}
+
+	slug, err := service.Shorten(req.LongUrl, req.CustomSlug, expiresAt)
 	if err != nil {
 		return nil, err
 	}
-	return &urlshortenerpb.ShortenResponse{Slug: slug}, nil
+
+	resp := &urlshortenerpb.ShortenResponse{
+		Slug:      slug,
+		// ExpiresAt: req.ExpiresAt, // (Optional: can set actual DB value if returned by service)
+	}
+	return resp, nil
 }
 
 func (s *URLShortenerServer) Redirect(ctx context.Context, req *urlshortenerpb.RedirectRequest) (*urlshortenerpb.RedirectResponse, error) {
-	longURL, err := service.Redirect(req.Slug)
+	// Pass all analytics fields to the service
+	longURL, expiresAt, err := service.Redirect(
+		req.Slug,
+		req.IpAddress,
+		req.UserAgent,
+		req.Referrer,
+	)
 	if err != nil {
 		return nil, err
 	}
-	return &urlshortenerpb.RedirectResponse{LongUrl: longURL}, nil
+	resp := &urlshortenerpb.RedirectResponse{
+		LongUrl:   longURL,
+		ExpiresAt: "",
+	}
+	if expiresAt != nil {
+		resp.ExpiresAt = expiresAt.Format(time.RFC3339)
+	}
+	return resp, nil
 }
 
 func (s *URLShortenerServer) GetStats(ctx context.Context, req *urlshortenerpb.StatsRequest) (*urlshortenerpb.StatsResponse, error) {
-	clicks, err := service.GetClicks(req.Slug)
+	clicks, expiresAt, err := service.GetClicks(req.Slug)
 	if err != nil {
 		return nil, err
 	}
-	return &urlshortenerpb.StatsResponse{Clicks: int32(clicks)}, nil
+	resp := &urlshortenerpb.StatsResponse{
+		Clicks:    int32(clicks),
+		ExpiresAt: "",
+	}
+	if expiresAt != nil {
+		resp.ExpiresAt = expiresAt.Format(time.RFC3339)
+	}
+	return resp, nil
 }

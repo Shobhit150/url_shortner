@@ -16,7 +16,7 @@ func RateLimiter() gin.HandlerFunc {
 		Password: "",
         DB:       0,
 	})
-	rate, _ := limiter.NewRateFromFormatted("5-M")
+	rate, _ := limiter.NewRateFromFormatted("10-M")
 
 	store, err := redisstore.NewStoreWithOptions(rdb, limiter.StoreOptions{
 		Prefix: "rate_limiter",

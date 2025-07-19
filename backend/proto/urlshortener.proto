@@ -12,16 +12,24 @@ service URLShortener {
 message ShortenRequest {
   string long_url = 1;
   string custom_slug = 2;
+  string expires_at = 3; // ISO8601/RFC3339 (UTC). Optional.
 }
+
 message ShortenResponse {
   string slug = 1;
+  
 }
 
 message RedirectRequest {
   string slug = 1;
+  string ip_address = 2;
+  string user_agent = 3;
+  string referrer = 4;
 }
+
 message RedirectResponse {
   string long_url = 1;
+  string expires_at = 2;
 }
 
 message StatsRequest {
@@ -29,4 +37,5 @@ message StatsRequest {
 }
 message StatsResponse {
   int32 clicks = 1;
+  string expires_at = 2;
 }

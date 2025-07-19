@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	// "fmt"
+	"fmt"
 	"log"
 
 	_ "github.com/lib/pq"
@@ -16,8 +16,11 @@ var db *sql.DB
 func InitPostgres(dsn string) {
 	var err error
 
+	fmt.Println("Connecting to Postgres with DSN: ok ", dsn)
+
+
 	// Retry logic for DB startup (optional, but good for Docker Compose setups)
-	for i := 0; i < 10; i++ {
+	for range [10]int{} {
 		db, err = sql.Open("postgres", dsn)
 		if err == nil {
 			err = db.Ping()
@@ -38,12 +41,37 @@ func InitPostgres(dsn string) {
 		id SERIAL PRIMARY KEY,
 		slug TEXT UNIQUE NOT NULL,
 		long_url TEXT NOT NULL,
-		clicks INTEGER DEFAULT 0
+		expires_at TIMESTAMP
 	);`
+
 	_, err = db.Exec(createTableQuery)
 	if err != nil {
 		log.Fatalf("Failed to create urls table: %v", err)
 	}
+	createTableQuery = `
+	CREATE TABLE IF NOT EXISTS url_clicks (
+		slug TEXT PRIMARY KEY,
+		count INTEGER NOT NULL DEFAULT 0
+	);`
+
+	_, err = db.Exec(createTableQuery)
+	if err != nil {
+		log.Fatalf("Failed to create url_clicks table: %v", err)
+	}
+	createTableQuery = `
+	CREATE TABLE IF NOT EXISTS click_analytics (
+		id SERIAL PRIMARY KEY,
+		slug TEXT,
+		timestamp TIMESTAMP,
+		ip TEXT,
+		user_agent TEXT,
+		referrer TEXT
+	);`
+	_, err = db.Exec(createTableQuery)
+	if err != nil {
+		log.Fatalf("Failed to create click_analytics table: %v", err)
+	}
+	
 
 	log.Println("Database initialized and urls table ensured.")
 }
@@ -60,17 +88,18 @@ func InitPostgres(dsn string) {
 
 	// _, err = db.Exec(createTableQuery)
 
-func Save(slug string, longURL string) error {
-	_, err := db.Exec(`INSERT INTO urls (slug, long_url) VALUES ($1, $2)`, slug, longURL)
+func Save(slug string, longURL string, expiresAt *time.Time) error {
+	_, err := db.Exec(`INSERT INTO urls (slug, long_url, expires_at) VALUES ($1, $2, $3)`, slug, longURL, expiresAt)
 	if err != nil {
 		log.Println("Error in Save: ", err)
 	}
 	return err
 }
 
-func Find(slug string) (string, error) {
+func Find(slug string) (string, *time.Time,  error) {
 	var longURL string
-	err := db.QueryRow(`SELECT long_url FROM urls WHERE slug = $1`, slug).Scan(&longURL)
+	var expiresAt *time.Time
+	err := db.QueryRow(`SELECT long_url, expires_at FROM urls WHERE slug = $1`, slug).Scan(&longURL, &expiresAt)
 	// if(err != nil){
 	// 	fmt.Println("Looking for slug:", slug)
 	// 	fmt.Println("Looking for string:", longURL)
@@ -78,11 +107,11 @@ func Find(slug string) (string, error) {
 	// }
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return "", errors.New("URL not found2")
+			return "", nil, errors.New("URL not found2")
 		}
-		return "", err
+		return "", nil, err
 	}
-	return longURL, nil
+	return longURL, expiresAt, nil
 }
 
 func Exists(slug string) (bool, error) {
@@ -97,11 +126,17 @@ func IncrementClicks(slug string) error {
 	return err
 }
 
-func GetClickCount(slug string) (int, error) {
+func GetClickCount(slug string) (int, *time.Time, error) {
 	click := 0
-	err := db.QueryRow(`SELECT clicks FROM urls WHERE slug = $1`, slug).Scan(&click)
+	var expiresAt *time.Time
+	err := db.QueryRow(`SELECT clicks, expires_at FROM urls WHERE slug = $1`, slug).Scan(&click, &expiresAt)
 	if err != nil {
-		return 0,err
+		return 0,expiresAt, err
 	}
-	return click, nil
+	return click,expiresAt, nil
+}
+
+
+func DB() *sql.DB {
+    return db
 }

@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
+
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -10,6 +12,7 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/Shobhit150/url_shortner/internal/handler"
+	"github.com/Shobhit150/url_shortner/internal/kafka"
 	"github.com/Shobhit150/url_shortner/internal/middleware"
 	"github.com/Shobhit150/url_shortner/internal/repository"
 	urlshortenerpb "github.com/Shobhit150/url_shortner/proto"
@@ -17,17 +20,23 @@ import (
 
 func main() {
 	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		dsn = "postgres://user:password@localhost:5432/urlshortener?sslmode=disable"
-	}
+    if dsn == "" {
+        // Use `db` as the hostname when running in Docker Compose!
+        dsn = "postgres://user:password@db:5432/urlshortener?sslmode=disable"
+    }
+    fmt.Println("Connecting to Postgres with DSN:", dsn)
 
+	kafka.InitKafka()
+	
 
+	fmt.Println("Connecting to Postgres with DSN:", dsn)
 	
 	repository.InitPostgres(dsn)
-
+	
 	// REST API
 	go func() {
 		r := gin.Default()
+
 		r.Use(func(c *gin.Context) {
 			c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 			c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
@@ -38,6 +47,7 @@ func main() {
 			}
 			c.Next()
 		})
+		
 		r.Use(middleware.RateLimiter())
 		handler.RegisterRouters(r)
 			
@@ -47,6 +57,8 @@ func main() {
 		}
 	}()
 
+
+	
 	// gRPC API
 	go func() {
 		lis, err := net.Listen("tcp", ":50051")
@@ -63,6 +75,8 @@ func main() {
 			log.Fatal("gRPC server:", err)
 		}
 	}()
+
+	go kafka.ReadFromKafka()
 
 	select {} // Block forever
 }
