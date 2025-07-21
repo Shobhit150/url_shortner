@@ -4,6 +4,12 @@ A **highly scalable**, **zero-tolerance** URL shortener built with **Go**, **Pos
 
 ---
 
+## 📈 Flow Chart
+
+![Flow Chart](./url.png)
+
+---
+
 ## 🚀 Features
 
 - Convert long URLs to short, unique slugs
@@ -15,10 +21,6 @@ A **highly scalable**, **zero-tolerance** URL shortener built with **Go**, **Pos
 - Extendable for analytics, expiry, QR codes, etc.
 
 ---
-
-## 📈 Flow Chart
-
-![Flow Chart](./url.png)
 
 ## 🧱 Project Structure
 
