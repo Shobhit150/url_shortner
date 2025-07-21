@@ -10,6 +10,31 @@ A **highly scalable**, **zero-tolerance** URL shortener built with **Go**, **Pos
 
 ---
 
+## 💻 Commads to run
+
+### Build App
+```sh
+docker compose up --build
+```
+
+### Access Postgres
+```sh
+docker compose exec db psql -U user -d urlshortener
+```
+
+### Access Redis
+```sh
+docker compose exec redis redis-cli
+```
+
+### Kafka: Listen to Click Events
+```sh
+docker exec -it url_shortner-kafka-1 \
+  kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic link_clicks --from-beginning
+```
+
+---
+
 ## 🚀 Features
 
 - Convert long URLs to short, unique slugs
