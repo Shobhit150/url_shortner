@@ -16,27 +16,49 @@ A **highly scalable**, **zero-tolerance** URL shortener built with **Go**, **Pos
 
 ---
 
+## 📈 Flow Chart
+
+![Flow Chart](./url.png)
+
 ## 🧱 Project Structure
 
 <pre> 
-url-shortener/
-├── cmd/                      # Entry point for the HTTP/GRPC server
-│   └── server/
-│       └── main.go
-├── internal/
-│   ├── handler/              # REST/GRPC route handlers
-│   ├── service/              # Business logic layer
-│   ├── repository/           # Database interaction
-│   ├── cache/                # Redis cache interface
-│   └── utils/                # Slug generator, validators, etc.
-├── proto/                    # GRPC protobufs (optional)
-├── migrations/               # SQL migration files
-├── configs/                  # Config and environment files
-├── Dockerfile                # Docker setup for the service
-├── docker-compose.yml        # Dev orchestration with Redis and Postgres
-├── go.mod
-└── README.md
- </pre>
+
+url_shortner/
+│
+├── backend/                     # Go backend for URL shortening service
+│   ├── cmd/
+│   │   └── server/
+│   │       └── main.go          # Entry point: server initialization
+│   ├── internal/                # Application core components
+│   │   ├── cache/               # Caching logic (Redis)
+│   │   ├── handle/              # HTTP request handlers (Gin)
+│   │   ├── kafka/               # Kafka integration for event streaming
+│   │   ├── middleware/          # Middleware components for HTTP requests
+│   │   ├── repository/          # Database interaction layer (Postgres)
+│   │   ├── service/             # Business logic and service layer
+│   │   └── utils/               # Utility/helper functions
+│   ├── proto/
+│   │   └── urlshortener.proto   # gRPC definitions for URL shortening service
+│   ├── dockerfile               # Dockerfile to containerize backend service
+│   ├── go.mod                   # Go module dependencies
+│   └── go.sum                   # Dependency checksums
+│
+├── frontend/                    # Next.js frontend application
+│   ├── app/
+│   │   ├── global.css           # Global CSS styling
+│   │   ├── layout.tsx           # Application layout component
+│   │   └── page.tsx             # Main landing page
+│   └── components/
+│       ├── magicui/             # Custom UI components
+│       ├── AnalyticsViewer.tsx  # Component for viewing analytics
+│       └── Shorten.tsx          # URL shortening component
+│
+├── docker-compose.yml           # Docker Compose configuration for easy setup
+└── README.md                    # Project overview and setup instructions
+
+
+</pre>
 
 
 ---
@@ -48,7 +70,6 @@ url-shortener/
 - **Cache:** Redis
 - **Containerization:** Docker
 - **API:** REST (option to switch to gRPC)
-- **Monitoring:** Prometheus + Grafana (optional)
-- **Queue (optional):** Kafka/NATS for analytics
+- **Queue:** Kafka/NATS for analytics
 
 ---

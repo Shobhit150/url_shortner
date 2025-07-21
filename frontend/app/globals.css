@@ -20,6 +20,13 @@
     100% {opacity:1;}
   }
 }
+.animate-fadein2 {
+  animation: fadein2 .55s cubic-bezier(.23,1.01,.32,1);
+}
+@keyframes fadein2 {
+  0% {opacity:0; transform: translateY(16px);}
+  100% {opacity:1; transform: none;}
+}
 
 /* :root {
   --background: #ffffff;

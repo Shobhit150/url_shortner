@@ -232,16 +232,7 @@ const Shorten = () => {
                     <span className="text-[10px]">Icons by react-icons · Dot animation by MagicUI</span>
                 </footer>
             </div>
-            {/* Animate fadein2 utility */}
-            <style>{`
-                .animate-fadein2 {
-                  animation: fadein2 .55s cubic-bezier(.23,1.01,.32,1);
-                }
-                @keyframes fadein2 {
-                  0% {opacity:0; transform: translateY(16px);}
-                  100% {opacity:1; transform: none;}
-                }
-            `}</style>
+            
         </div>
     );
 };
