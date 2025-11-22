@@ -52,7 +52,6 @@ services:
       NODE_ENV: development
       NEXT_PUBLIC_API_URL: http://app:8080
     command: npm run dev        # Use dev server for hot reload
-    user: "1000:1000"
     depends_on:
       - app
 

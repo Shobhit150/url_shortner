@@ -31,6 +31,10 @@ func GetRedisClient() *redis.Client {
 func SetSlug(ctx context.Context, slug, url string, expiresAt *time.Time) error {
 	client := GetRedisClient()
 	d := time.Until(*expiresAt)
+	if expiresAt == nil {
+        defaultTTL := 30 * 24 * time.Hour
+        return client.Set(ctx, slug, url, defaultTTL).Err()
+    }
 	ttl := time.Duration(math.Max(float64(d), 0))
 	if ttl > 0 {
 		return client.Set(ctx, slug, url, ttl).Err()
