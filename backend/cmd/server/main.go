@@ -68,7 +68,7 @@ func main() {
 		grpcServer := grpc.NewServer()
 		urlshortenerpb.RegisterURLShortenerServer(grpcServer, &handler.URLShortenerServer{})
 
-		reflection.Register(grpcServer) // <-- ADD THIS
+		reflection.Register(grpcServer) 
 
 		log.Println("gRPC API listening on :50051")
 		if err := grpcServer.Serve(lis); err != nil {

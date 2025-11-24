@@ -3,6 +3,8 @@ package kafka
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+
 	// "fmt"
 	"time"
 
@@ -31,8 +33,9 @@ func PublishLinkClick(slug, ip, userAgent, referrer string) error {
 	}
 	jsonValue, err := json.Marshal(payload)
 	if err != nil {
-		return err // Handle JSON error!
+		return err
 	}
+	fmt.Println("Publishing Kafka click event for", slug)
 	
 	msg := kafka.Message{
 		Key:   []byte(slug),

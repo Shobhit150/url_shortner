@@ -27,12 +27,6 @@ docker compose exec db psql -U user -d urlshortener
 docker compose exec redis redis-cli
 ```
 
-### Kafka: Listen to Click Events
-```sh
-docker exec -it url_shortner-kafka-1 \
-  kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic link_clicks --from-beginning
-```
-
 ---
 
 ## 🚀 Features

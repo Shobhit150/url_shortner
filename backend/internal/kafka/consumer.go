@@ -59,7 +59,7 @@ loop:
 				log.Println("Unmarshal error:", err)
 				continue
 			}
-			
+
 			_, err = db.Exec(
 				`INSERT INTO url_clicks (slug, count) VALUES ($1, 1)
 				 ON CONFLICT (slug) DO UPDATE SET count = url_clicks.count + 1`,
@@ -70,7 +70,7 @@ loop:
 			} else {
 				fmt.Printf("Click counted for slug: %s\n", event.Slug)
 			}
-			
+
 			_, err = db.Exec(
 				`INSERT INTO click_analytics (slug, timestamp, ip, user_agent, referrer)
 				 VALUES ($1, $2, $3, $4, $5)`,

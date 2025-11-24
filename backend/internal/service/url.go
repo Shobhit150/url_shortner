@@ -65,7 +65,7 @@ func Shorten(longURL string, CustomSlug string, expiresAt *time.Time) (string, e
 func Redirect(slug, ip, userAgent, referrer string) (string, *time.Time, error){
 	ctx := context.Background()
 
-	//  
+	
 	
 	longURL, err := cache.GetSlug(ctx, slug)
 

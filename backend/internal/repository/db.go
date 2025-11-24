@@ -77,14 +77,13 @@ func InitPostgres(dsn string) {
 }
 
 // Auto-create table if not exists
-	// createTableQuery := `
-	// // CREATE TABLE IF NOT EXISTS urls (
-	// // 	id SERIAL PRIMARY KEY,
-	// // 	slug TEXT UNIQUE NOT NULL,
-	// // 	long_url TEXT NOT NULL,
-	// // 	clicks INTEGER DEFAULT 0,
+	// createTableQuery := `CREATE TABLE IF NOT EXISTS urls (
+	// 	id SERIAL PRIMARY KEY,
+	// 	slug TEXT UNIQUE NOT NULL,
+	// 	long_url TEXT NOT NULL,
+	// 	clicks INTEGER DEFAULT 0,
 		
-	// // );`
+	// );`
 
 	// _, err = db.Exec(createTableQuery)
 
