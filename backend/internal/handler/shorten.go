@@ -37,7 +37,7 @@ func ShortenURL(c *gin.Context) {
 			c.JSON(http.StatusConflict, gin.H{"error": "Custom slug already exists. Please try another."})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to shorten URL: " + err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to shorten URL3: " + err.Error()})
 		return
 	}
 

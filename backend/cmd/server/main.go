@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
 
@@ -24,18 +23,17 @@ func main() {
         // Use `db` as the hostname when running in Docker Compose!
         dsn = "postgres://user:password@db:5432/urlshortener?sslmode=disable"
     }
-    fmt.Println("Connecting to Postgres with DSN:", dsn)
+  
 
 	kafka.InitKafka()
-	
-
-	fmt.Println("Connecting to Postgres with DSN:", dsn)
-	
 	repository.InitPostgres(dsn)
+
+	go kafka.ReadFromKafka()
 	
 	// REST API
 	go func() {
 		r := gin.Default()
+		
 
 		r.Use(func(c *gin.Context) {
 			c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -56,7 +54,7 @@ func main() {
 			log.Fatal("REST server:", err)
 		}
 	}()
-
+	
 
 	
 	// gRPC API
@@ -76,7 +74,7 @@ func main() {
 		}
 	}()
 
-	go kafka.ReadFromKafka()
+	
 
 	select {} // Block forever
 }

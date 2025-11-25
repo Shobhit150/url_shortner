@@ -5,6 +5,7 @@ import { DotPattern } from './magicui/dot-pattern';
 import { FaGithub, FaLinkedin, FaTwitter, FaChartBar } from 'react-icons/fa';
 import { QRCodeCanvas } from "qrcode.react";
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const GITHUB_REPO = 'https://github.com/Shobhit150/url_shortner';
 const LINKEDIN = 'https://www.linkedin.com/in/shobhit150/';
@@ -47,25 +48,25 @@ const Shorten = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
-    
+
             const data = await resp.json();
-    
+
             // Handle error from backend
             if (!resp.ok) {
                 setShortResult('');
-                setError(data.error || "Failed to shorten URL");
+                setError(data.error || "Failed to shorten URL2");
                 return;
             }
-    
+
             setShortResult(data.shorten_url);
         } catch (err) {
             setShortResult('');
-            setError('Failed to shorten URL');
+            setError('Failed to shorten URL12');
         } finally {
             setLoading(false);
         }
     };
-    
+
 
     const handleCopy = () => {
         if (!shortResult) return;
@@ -124,8 +125,8 @@ const Shorten = () => {
                 </nav>
 
                 {/* Main Content */}
-                <main className="flex flex-col items-center justify-center flex-grow p-6">
-                    <div className="w-full max-w-xl bg-white/10 backdrop-blur-md p-8 rounded-3xl shadow-2xl border border-white/20 transition-all duration-300">
+                <main className="flex flex-row items-center justify-around flex-grow p-6">
+                    <div className="w-full max-w-xl bg-white/10 p-8 rounded-3xl  border border-white/20">
                         <div className="flex flex-col items-center mb-6">
                             <h1 className="text-4xl font-extrabold text-center mb-2 bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-purple-200 to-sky-300 select-none drop-shadow">
                                 Shorten Your URL
@@ -150,7 +151,7 @@ const Shorten = () => {
                                 type="datetime-local"
                                 value={expiry}
                                 onChange={(e) => setExpiry(e.target.value)}
-                                placeholder="Optional: Expiry (date & time)"
+                                onClick={(e) => (e.target as HTMLInputElement).showPicker()}
                                 className="bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-base text-white outline-none focus:ring-2 focus:ring-sky-400/60 transition placeholder:italic"
                             />
                             <button
@@ -221,6 +222,19 @@ const Shorten = () => {
                             </div>
                         )}
                     </div>
+                    <div className="md:w-1/2 flex flex-col items-center text-center gap-3 p-4 bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 shadow-xl">
+                        <h3 className="text-lg font-semibold text-blue-200 tracking-wide">
+                            Background Architecture
+                        </h3>
+                        <Image
+                            src="/architecture.webp"
+                            alt="System Architecture"
+                            width={650}
+                            height={650}
+                            className="rounded-xl shadow-2xl border border-white/20 hover:scale-[1.02] transition-transform duration-300 ease-out"
+                        />
+                    </div>
+
                 </main>
 
                 {/* Footer */}
@@ -232,7 +246,7 @@ const Shorten = () => {
                     <span className="text-[10px]">Icons by react-icons · Dot animation by MagicUI</span>
                 </footer>
             </div>
-            
+
         </div>
     );
 };

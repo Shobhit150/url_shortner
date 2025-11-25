@@ -5,10 +5,11 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 
+
 COPY . .
 
 # Prevent Turbopack crashes
 RUN mkdir -p .next && chmod -R 777 .next
 
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]

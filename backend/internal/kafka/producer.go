@@ -17,9 +17,12 @@ var kafkaWriter *kafka.Writer
 
 func InitKafka() {
 	kafkaWriter = kafka.NewWriter(kafka.WriterConfig{
-		Brokers: []string{"kafka:9092"},
-		Topic: "link_clicks",
-	})
+    Brokers:      []string{"kafka:9092"},
+    Topic:        "link_clicks",
+    RequiredAcks: -1,
+    Async:        false,
+    BatchTimeout: 1 * time.Millisecond,
+})
 }
 
 func PublishLinkClick(slug, ip, userAgent, referrer string) error {

@@ -55,6 +55,11 @@ func Shorten(longURL string, CustomSlug string, expiresAt *time.Time) (string, e
 		}
 		slug = CustomSlug
 	}
+	if expiresAt == nil {
+		t := time.Now().Add(30 * 24 * time.Hour)
+		expiresAt = &t
+	}
+	
 	err := repository.Save(slug,longURL, expiresAt)
 	if err != nil {
 		return "", err
