@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState } from "react";
 
-// Dummy slug list; you can fetch from API or props!
 
 type ClickDetail = {
     timestamp: string;
@@ -16,10 +15,10 @@ type AnalyticsResponse = {
     analytics: ClickDetail[];
 };
 
-export default function AnalyticsViewer() {
-    const [slug, setSlug] = useState<string>("");
+export default function AnalyticsViewer({ initialSlug }: { initialSlug: string }) {
+    const [slug, setSlug] = useState(initialSlug);
     const [data, setData] = useState<AnalyticsResponse | null>(null);
-    const [error, setError] = useState<string>("");
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const fetchAnalytics = async (chosenSlug = slug) => {
@@ -35,6 +34,12 @@ export default function AnalyticsViewer() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (initialSlug) {
+            fetchAnalytics(initialSlug);
+        }
+    }, [initialSlug]);
 
 
 

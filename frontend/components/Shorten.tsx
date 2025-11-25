@@ -210,10 +210,10 @@ const Shorten = () => {
                                 </div>
 
                                 {/* --- Analytics Button --- */}
-                                <div className="flex justify-center mt-6">
+                                <div className="flex justify-center mt-6 cursor-pointer">
                                     <button
                                         className="flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 hover:scale-105 shadow-md transition-all text-white font-semibold text-base"
-                                        onClick={() => router.push(`/analysis?slug=${getSlugFromResult()}`)}
+                                        onClick={() => router.push(`/analytics/${getSlugFromResult()}`)}
                                     >
                                         <FaChartBar className="text-lg" />
                                         View Analytics
