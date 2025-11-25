@@ -6,7 +6,7 @@ A **highly scalable**, **zero-tolerance** URL shortener built with **Go**, **Pos
 
 ## 📈 Flow Chart
 
-![Flow Chart](./url.png)
+![Flow Chart](./architecture.jpg)
 
 ---
 
